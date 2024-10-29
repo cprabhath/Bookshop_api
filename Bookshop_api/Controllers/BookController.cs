@@ -1,5 +1,6 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Models;
+using Bookshop_api.Validations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -34,8 +35,18 @@ namespace Bookshop_api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Book book)
         {
+
+            var validations = new BookValidationsValidator();
+            var validationResult = validations.Validate(new BookValidations(book.Image, book.Title, book.Author, book.Description, book.Category, book.Language, book.Price));
+
+            if (!validationResult.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, validationResult.Errors[0].ErrorMessage);
+            }
+
             var result = _bookServices.AddBook(book);
-            if(result == "OK")
+
+            if (result == "OK")
             {
                 return StatusCode(StatusCodes.Status200OK, "Book Added Successfully");
             }
@@ -67,6 +78,14 @@ namespace Bookshop_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Book book)
         {
+            var validations = new BookValidationsValidator();
+            var validationResult = validations.Validate(new BookValidations(book.Image, book.Title, book.Author, book.Description, book.Category, book.Language, book.Price));
+
+            if (!validationResult.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, validationResult.Errors[0].ErrorMessage);
+            }
+
             var result = _bookServices.UpdateBook(id, book);
 
             if (result.Result == "OK")

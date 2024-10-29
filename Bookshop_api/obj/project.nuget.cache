@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "SkCsR1y+wFA=",
+  "dgSpecHash": "n1Ksky07MZY=",
   "success": true,
   "projectFilePath": "E:\\Projects\\AD Course Work\\BookShop\\Bookshop_api\\Bookshop_api\\Bookshop_api.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\cphet\\.nuget\\packages\\fluentvalidation\\11.10.0\\fluentvalidation.11.10.0.nupkg.sha512",
     "C:\\Users\\cphet\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\cphet\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.10\\microsoft.aspnetcore.cryptography.internal.8.0.10.nupkg.sha512",
     "C:\\Users\\cphet\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.10\\microsoft.aspnetcore.cryptography.keyderivation.8.0.10.nupkg.sha512",

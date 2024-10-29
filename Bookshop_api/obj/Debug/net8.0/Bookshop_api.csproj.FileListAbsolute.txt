@@ -117,3 +117,5 @@ E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\obj\Debug\net8.0\r
 E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\obj\Debug\net8.0\Bookshop_api.pdb
 E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\obj\Debug\net8.0\Bookshop_api.genruntimeconfig.cache
 E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\obj\Debug\net8.0\ref\Bookshop_api.dll
+E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\bin\Debug\net8.0\FluentValidation.dll
+E:\Projects\AD Course Work\BookShop\Bookshop_api\Bookshop_api\obj\Debug\net8.0\Bookshop_api.sourcelink.json
