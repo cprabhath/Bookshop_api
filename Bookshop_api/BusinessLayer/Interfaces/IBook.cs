@@ -2,7 +2,7 @@
 
 namespace Bookshop_api.BusinessLayer.Interfaces
 {
-    public interface IBooks
+    public interface IBook
     {
         IEnumerable<Book> GetAllBooks();
         String AddBook(Book book);

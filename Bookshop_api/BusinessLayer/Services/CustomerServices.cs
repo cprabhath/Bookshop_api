@@ -5,36 +5,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookshop_api.BusinessLayer.Services
 {
-    public class BookServices : IBook
+    public class CustomerServices : ICustomer
     {
         private readonly ApplicationDBContext _context;
-        public BookServices(ApplicationDBContext context)
+        public CustomerServices(ApplicationDBContext context)
         {
             _context = context;
         }
-        public String AddBook(Book book)
+        public string AddCustomer(Customer customer)
         {
             try
             {
-                _context.Books.Add(book);
+                _context.Customers.Add(customer);
                 _context.SaveChanges();
                 return "OK";
             }
-            catch (DbUpdateException ex)
+            catch(DbUpdateException ex)
             {
                 return ex.InnerException!.Message;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return ex.Message;
             }
         }
 
-        public async Task<string> DeleteBook(int id)
+        public async Task<string> DeleteCustomer(int id)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Customers.FindAsync(id);
                 if (result != null)
                 {
                     result.DeletedAt = DateTime.Now;
@@ -43,7 +43,7 @@ namespace Bookshop_api.BusinessLayer.Services
                 }
                 else
                 {
-                    return "Book not found";
+                    return "Customer not found";
                 }
             }
             catch (DbUpdateException ex)
@@ -56,11 +56,11 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public IEnumerable<Customer> GetAllCustomers()
         {
             try
             {
-                var result = _context.Books
+                var result = _context.Customers
                     .Where(b => b.DeletedAt == null)
                     .ToList();
                 return result;
@@ -75,11 +75,11 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<Book> GetBookById(int id)
+        public async Task<Customer> GetCustomerById(int id)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Customers.FindAsync(id);
                 return result!;
             }
             catch (DbUpdateException ex)
@@ -92,37 +92,33 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<string> UpdateBook(int id, Book book)
+        public async Task<string> UpdateCustomer(int id, Customer customer)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Customers.FindAsync(id);
                 if (result != null)
                 {
-                    result.Image = book.Image;
-                    result.ISBN = book.ISBN;
-                    result.Title = book.Title;
-                    result.Author = book.Author;
-                    result.Description = book.Description;
-                    result.Category = book.Category;
-                    result.Language = book.Language;
-                    result.Price = book.Price;
+                    result.Name = customer.Name;
+                    result.Email = customer.Email;
+                    result.MobileNumber = customer.MobileNumber;
+                    result.Address = customer.Address;
                     result.UpdateAt = DateTime.Now;
                     await _context.SaveChangesAsync();
                     return "OK";
                 }
                 else
                 {
-                    return "Book not found";
+                    return "Customer not found";
                 }
             }
             catch (DbUpdateException ex)
             {
-                return ex.InnerException!.Message;
+                throw new Exception(ex.InnerException!.Message);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw new Exception(ex.Message);
             }
         }
     }

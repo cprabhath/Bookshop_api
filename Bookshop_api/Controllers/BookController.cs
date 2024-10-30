@@ -1,6 +1,7 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Models;
 using Bookshop_api.Validations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -9,13 +10,14 @@ namespace Bookshop_api.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBooks _bookServices;
-        public BookController(IBooks bookServices)
+        private readonly IBook _bookServices;
+        public BookController(IBook bookServices)
         {
             _bookServices = bookServices;
         }
 
         // ====================== Get All Books ======================
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -32,6 +34,7 @@ namespace Bookshop_api.Controllers
         // ===========================================================
 
         // =========================== Add Book ======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public IActionResult Post([FromBody] Book book)
         {
@@ -75,6 +78,7 @@ namespace Bookshop_api.Controllers
         // ===========================================================
 
         // ====================== Update Book ========================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Book book)
         {
@@ -100,6 +104,7 @@ namespace Bookshop_api.Controllers
         // ===========================================================
 
         // ====================== Delete Book ========================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

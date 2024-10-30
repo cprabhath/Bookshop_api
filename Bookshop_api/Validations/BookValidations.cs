@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Bookshop_api.Models;
+using FluentValidation;
 
 namespace Bookshop_api.Validations
 {
@@ -8,11 +9,11 @@ namespace Bookshop_api.Validations
         public string Title { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
-        public string Category { get; set; }
+        public Category Category { get; set; }
         public string Language { get; set; }
         public double Price { get; set; }
 
-        public BookValidations(string image, string title, string author, string description, string category, string language, double price)
+        public BookValidations(string image, string title, string author, string description, Category category, string language, double price)
         {
             Image = image;
             Title = title;

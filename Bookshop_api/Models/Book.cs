@@ -9,19 +9,22 @@ namespace Bookshop_api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string Image { get; set; }
-        public int? ISBN { get; set; }
+        public string Image { get; set; } = string.Empty;
+        public int? ISBN { get; set; } = null;
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         [Required]
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         [Required]
-        public string Category { get; set; }
+        public int CategoryID { get; set; }
+        [ForeignKey("CategoryID")]
+        public virtual Category Category { get; set; } = null!;
         [Required]
-        public string Language { get; set; }
+        public string Language { get; set; } = string.Empty;
         [Required]
-        public double Price { get; set; }
+        public double Price { get; set; } = 0.0;
+
     }
 }
