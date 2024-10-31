@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
 {
-    [Authorize(Policy = "SuperPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase

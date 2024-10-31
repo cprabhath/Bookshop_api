@@ -5,36 +5,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookshop_api.BusinessLayer.Services
 {
-    public class BookServices : IBook
+    public class AuthorServices : IAuthor
     {
         private readonly ApplicationDBContext _context;
-        public BookServices(ApplicationDBContext context)
+        public AuthorServices(ApplicationDBContext context)
         {
             _context = context;
         }
-        public String AddBook(Book book)
+
+        public string AddAuthor(Author author)
         {
             try
             {
-                _context.Books.Add(book);
+                _context.Authors.Add(author);
                 _context.SaveChanges();
                 return "OK";
             }
             catch (DbUpdateException ex)
             {
-                return ex.InnerException!.Message;
+                throw new Exception(ex.InnerException!.Message);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw new Exception(ex.Message);
             }
         }
 
-        public async Task<string> DeleteBook(int id)
+        public async Task<string> DeleteAuthor(int id)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Authors.FindAsync(id);
                 if (result != null)
                 {
                     result.DeletedAt = DateTime.Now;
@@ -56,13 +57,28 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<Author> GetAuthorById(int id)
         {
             try
             {
-                var result = _context.Books
-                    .Include(b => b.Author)
-                    .Include(b => b.Category)
+                var result = await _context.Authors.FindAsync(id);
+                return result!;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.InnerException!.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<Author> GetAllAuthors()
+        {
+            try
+            {
+                var result = _context.Authors
                     .Where(b => b.DeletedAt == null)
                     .ToList();
                 return result;
@@ -77,15 +93,24 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<Book> GetBookById(int id)
+        public async Task<string> UpdateAuthor(int id, Author author)
         {
             try
             {
-                var result = await _context.Books.
-                    Include(b => b.Author).
-                    Include(b => b.Category).
-                    FirstOrDefaultAsync(b => b.Id == id);
-                return result!;
+                var result = await _context.Authors.FindAsync(id);
+                if (result != null)
+                {
+                    result.Name = author.Name;
+                    result.MobileNumber = author.MobileNumber;
+                    result.Email = author.Email;
+                    result.Address = author.Address;
+                    await _context.SaveChangesAsync();
+                    return "OK";
+                }
+                else
+                {
+                    return "Author not found";
+                }
             }
             catch (DbUpdateException ex)
             {
@@ -94,40 +119,6 @@ namespace Bookshop_api.BusinessLayer.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<string> UpdateBook(int id, Book book)
-        {
-            try
-            {
-                var result = await _context.Books.FindAsync(id);
-                if (result != null)
-                {
-                    result.Image = book.Image;
-                    result.ISBN = book.ISBN;
-                    result.Title = book.Title;
-                    result.Author = book.Author;
-                    result.Description = book.Description;
-                    result.Category = book.Category;
-                    result.Language = book.Language;
-                    result.Price = book.Price;
-                    result.UpdateAt = DateTime.Now;
-                    await _context.SaveChangesAsync();
-                    return "OK";
-                }
-                else
-                {
-                    return "Book not found";
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                return ex.InnerException!.Message;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
             }
         }
     }

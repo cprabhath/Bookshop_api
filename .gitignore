@@ -1,3 +1,4 @@
 bookshop_api/bin
 .vs
 bookshop_api/obj
+bookshop_api/appsettings.json

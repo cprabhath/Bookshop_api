@@ -5,18 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookshop_api.BusinessLayer.Services
 {
-    public class BookServices : IBook
+    public class CategoryServices : ICategory
     {
         private readonly ApplicationDBContext _context;
-        public BookServices(ApplicationDBContext context)
+
+        public CategoryServices(ApplicationDBContext context)
         {
             _context = context;
         }
-        public String AddBook(Book book)
+
+        public string AddCategory(Category category)
         {
             try
             {
-                _context.Books.Add(book);
+                _context.Categories.Add(category);
                 _context.SaveChanges();
                 return "OK";
             }
@@ -30,11 +32,11 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<string> DeleteBook(int id)
+        public async Task<string> DeleteCategory(int id)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Categories.FindAsync(id);
                 if (result != null)
                 {
                     result.DeletedAt = DateTime.Now;
@@ -56,13 +58,11 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public IEnumerable<Category> GetAllCategories()
         {
             try
             {
-                var result = _context.Books
-                    .Include(b => b.Author)
-                    .Include(b => b.Category)
+                var result = _context.Categories
                     .Where(b => b.DeletedAt == null)
                     .ToList();
                 return result;
@@ -77,14 +77,11 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<Book> GetBookById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
             try
             {
-                var result = await _context.Books.
-                    Include(b => b.Author).
-                    Include(b => b.Category).
-                    FirstOrDefaultAsync(b => b.Id == id);
+                var result = await _context.Categories.FindAsync(id);
                 return result!;
             }
             catch (DbUpdateException ex)
@@ -97,37 +94,30 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<string> UpdateBook(int id, Book book)
+        public async Task<string> UpdateCategory(int id, Category category)
         {
             try
             {
-                var result = await _context.Books.FindAsync(id);
+                var result = await _context.Categories.FindAsync(id);
                 if (result != null)
                 {
-                    result.Image = book.Image;
-                    result.ISBN = book.ISBN;
-                    result.Title = book.Title;
-                    result.Author = book.Author;
-                    result.Description = book.Description;
-                    result.Category = book.Category;
-                    result.Language = book.Language;
-                    result.Price = book.Price;
-                    result.UpdateAt = DateTime.Now;
+                    result.Name = category.Name;
+                    result.Description = category.Description;
                     await _context.SaveChangesAsync();
                     return "OK";
                 }
                 else
                 {
-                    return "Book not found";
+                    return "Category not found";
                 }
             }
             catch (DbUpdateException ex)
             {
-                return ex.InnerException!.Message;
+                throw new Exception(ex.InnerException!.Message);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw new Exception(ex.Message);
             }
         }
     }
