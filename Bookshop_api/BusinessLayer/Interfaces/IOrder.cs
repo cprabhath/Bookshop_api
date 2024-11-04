@@ -4,10 +4,10 @@ namespace Bookshop_api.BusinessLayer.Interfaces
 {
     public interface IOrder
     {
-        Task<IEnumerable<Order>> GetOrders();
+        IEnumerable<Order> GetOrders();
         Task<Order> GetOrder(int id);
-        Task<Order> AddOrder(Order order);
-        Task<Order> UpdateOrder(int id, Order order);
-        Task<Order> DeleteOrder(int id);
+        String AddOrder(Order order);
+        Task<string> UpdateOrder(int id, Order order);
+        Task<string> DeleteOrder(int id);
     }
 }

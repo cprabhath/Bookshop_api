@@ -55,7 +55,9 @@ namespace Bookshop_api.BusinessLayer.Services
         {
             try
             {
-                var cartItem = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == customerId && c.BookId == bookId);
+                var cartItem = await _context.Carts
+                    .Include(c => c.Book)
+                    .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.BookId == bookId);
 
                 if (cartItem == null) throw new Exception("Item not found in cart");
 
