@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bookshop_api.Models;
+using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 
 namespace Stripe_Web_API.Controllers
@@ -8,37 +9,48 @@ namespace Stripe_Web_API.Controllers
     public class PaymentsController : ControllerBase
     {
         [HttpPost("create-checkout-session")]
-        public IActionResult CreateCheckoutSession([FromBody] CheckoutSessionRequest request)
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] CheckoutRequest request)
         {
-            var options = new SessionCreateOptions
+            try
             {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<SessionLineItemOptions>
-            {
-                new SessionLineItemOptions
+                var lineItems = new List<SessionLineItemOptions>();
+
+                foreach (var item in request.CartItems)
                 {
-                    PriceData = new SessionLineItemPriceDataOptions
+                    lineItems.Add(new SessionLineItemOptions
                     {
-                        Currency = "usd",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        PriceData = new SessionLineItemPriceDataOptions
                         {
-                            Name = request.ProductName
+                            Currency = "usd",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.ProductName
+                            },
+                            UnitAmount = (long)(item.Amount * 100) 
                         },
-                        UnitAmount = request.Amount
-                    },
-                    Quantity = 1
+                        Quantity = item.Quantity
+                    });
                 }
-            },
-                Mode = "payment",
-                SuccessUrl = "http://localhost:5173/#/?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "http://localhost:5173/#/cancelled"
-            };
 
-            var service = new SessionService();
-            Session session = service.Create(options);
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string> { "card" },
+                    LineItems = lineItems,
+                    Mode = "payment",
+                    SuccessUrl = "http://localhost:5173/#/payment/complete",
+                    CancelUrl = "http://localhost:5173/#/payment/cancelled",
+                };
 
-            return Ok(new { sessionId = session.Id });
+                var service = new SessionService();
+                var session = await service.CreateAsync(options);
+                return Ok(new { sessionId = session.Id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
     }
 
     public class CheckoutSessionRequest

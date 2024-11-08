@@ -1,6 +1,8 @@
-﻿using Bookshop_api.Models;
+﻿using Bookshop_api.Data;
+using Bookshop_api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,16 +17,18 @@ namespace Bookshop_api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDBContext _context;
 
-        public AuthController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDBContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("customer-register")]
-        public async Task<IActionResult> Register([FromBody] Login model)
+        public async Task<IActionResult> Register([FromBody] CustomerRegistration model)
         {
             var customer = new IdentityUser { UserName = model.Email };
             var result = await _userManager.CreateAsync(customer, model.Password);
@@ -37,11 +41,26 @@ namespace Bookshop_api.Controllers
                 }
                 await _userManager.AddToRoleAsync(customer, "User");
 
+                var newCustomer = new Customer
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    MobileNumber = model.MobileNumber,
+                    Address = model.Address,
+                    ReadingGoals = model.ReadingGoals,
+                    FavoriteGenres = model.FavoriteGenres,
+                    CreateAt = DateTime.Now,
+                    UpdateAt = DateTime.Now
+                };
+                await _context.Customers.AddAsync(newCustomer);
+                await _context.SaveChangesAsync();
+
                 return Ok(new { message = "User created successfully", Username = customer.UserName, Role = "User" });
             }
 
             return BadRequest(result.Errors);
         }
+
 
         [HttpPost("admin-register")]
         public async Task<IActionResult> RegisterAdmin([FromBody] Login model)
@@ -51,13 +70,10 @@ namespace Bookshop_api.Controllers
 
             if (result.Succeeded)
             {
-                // Check if the "Admin" role exists, and create it if it doesn't
                 if (!await _roleManager.RoleExistsAsync("Admin"))
                 {
                     await _roleManager.CreateAsync(new IdentityRole("Admin"));
                 }
-
-                // Assign the "Admin" role to the newly registered user
                 await _userManager.AddToRoleAsync(admin, "Admin");
 
                 return Ok(new { message = "Admin created successfully", Username = admin.UserName, Role = "Admin" });
@@ -91,10 +107,23 @@ namespace Bookshop_api.Controllers
                         signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)),
                         SecurityAlgorithms.HmacSha256)
                     );
-                return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token) });
+
+                Customer? customerDetails = null;
+
+                if (role.Contains("User"))
+                {
+                    customerDetails = await _context.Customers.FirstOrDefaultAsync(
+                        c => c.Email == model.Email
+                    );
+                }
+
+                return Ok(new {
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    User = customerDetails
+                }); 
             }
 
-            return Unauthorized();
+            return BadRequest("Invalid Username or Password");
         }
 
         [HttpPost("add-role")]
