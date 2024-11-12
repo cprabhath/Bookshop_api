@@ -13,9 +13,11 @@ namespace Bookshop_api.Models
         public string Email { get; set; } = string.Empty;
         public string MobileNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
+        public string? Bio { get; set; } = string.Empty;
         public string? ReadingGoals { get; set; } = string.Empty;
         public List<string>? FavoriteGenres { get; set; } = new List<string>();
         public ICollection<Cart> Carts { get; set; } = new List<Cart>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

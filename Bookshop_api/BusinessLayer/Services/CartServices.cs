@@ -14,25 +14,25 @@ namespace Bookshop_api.BusinessLayer.Services
             _context = context;
         }
 
-        public async Task<Cart> AddToCart(int customerId, int bookId, int quantity)
+        public async Task<Cart> AddToCart(Cart cart)
         {
             try
             {
-                var cartItem = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == customerId && c.BookId == bookId);
+                var cartItem = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == cart.CustomerId && c.BookId == cart.BookId);
 
                 if (cartItem != null)
                 {
-                    cartItem.Quantity += quantity;
+                    cartItem.Quantity += cart.Quantity;
                     cartItem.TotalPrice = cartItem.Quantity * cartItem.Book.Price;
                 }
                 else
                 {
                     cartItem = new Cart
                     {
-                        CustomerId = customerId,
-                        BookId = bookId,
-                        Quantity = quantity,
-                        TotalPrice = quantity * (await _context.Books.FindAsync(bookId))?.Price ?? 0.0,
+                        CustomerId = cart.CustomerId,
+                        BookId = cart.BookId,
+                        Quantity = cart.Quantity,
+                        TotalPrice = cart.Quantity * (await _context.Books.FindAsync(cart.BookId))?.Price ?? 0.0,
                         Status = "Pending"
                     };
                     _context.Carts.Add(cartItem);

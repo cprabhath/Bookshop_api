@@ -20,5 +20,6 @@ namespace Bookshop_api.Models
         public virtual Author? Author { get; set; } = null!;
         public string Language { get; set; } = string.Empty;
         public double Price { get; set; } = 0.0;
+        public int qty { get; set; }
     }
 }

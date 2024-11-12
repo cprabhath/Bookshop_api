@@ -1,4 +1,5 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
+using Bookshop_api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -16,11 +17,11 @@ namespace Bookshop_api.Controllers
 
         // ======================= Add to Cart =======================
         [HttpPost("add")]
-        public async Task<IActionResult> AddToCart(int customerId, int bookId, int quantity)
+        public async Task<IActionResult> AddToCart(Cart cart)
         {
             try
             {
-                var cartItem = await _cartService.AddToCart(customerId, bookId, quantity);
+                var cartItem = await _cartService.AddToCart(cart);
                 return Ok(cartItem);
             }
             catch (Exception ex)

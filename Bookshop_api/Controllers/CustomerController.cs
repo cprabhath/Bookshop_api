@@ -2,6 +2,7 @@
 using Bookshop_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Forwarding;
 
 namespace Bookshop_api.Controllers
 {
@@ -98,5 +99,21 @@ namespace Bookshop_api.Controllers
             }
         }
         // ===============================================================
+
+        // ================= Update Customers Image ======================
+        [HttpPost("update-image")]
+        public async Task<IActionResult> UpdateImage([FromBody] ImageUpload request)
+        {
+            var result = await _customer.UpdateImage(request.Id, request.Url);
+
+            if (result == "OK")
+            {
+                return StatusCode(StatusCodes.Status200OK, "Image Updated Successfully");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, result);
+            }
+        }
     }
 }

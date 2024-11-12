@@ -4,6 +4,7 @@ using Bookshop_api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookshop_api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241108124624_init5")]
+    partial class init5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,9 +107,6 @@ namespace Bookshop_api.Migrations
 
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("qty")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -202,6 +202,7 @@ namespace Bookshop_api.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreateAt")
@@ -559,7 +560,7 @@ namespace Bookshop_api.Migrations
                         .IsRequired();
 
                     b.HasOne("Bookshop_api.Models.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -633,8 +634,6 @@ namespace Bookshop_api.Migrations
             modelBuilder.Entity("Bookshop_api.Models.Customer", b =>
                 {
                     b.Navigation("Carts");
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

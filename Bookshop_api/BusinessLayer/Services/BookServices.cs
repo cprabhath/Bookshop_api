@@ -64,7 +64,7 @@ namespace Bookshop_api.BusinessLayer.Services
                     .Include(b => b.Author)
                     .Include(b => b.Category)
                     .Where(b => b.DeletedAt == null)
-                    .ToList();
+                    .AsEnumerable();
                 return result;
             }
             catch (DbUpdateException ex)

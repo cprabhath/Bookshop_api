@@ -103,7 +103,36 @@ namespace Bookshop_api.BusinessLayer.Services
                     result.Email = customer.Email;
                     result.MobileNumber = customer.MobileNumber;
                     result.Address = customer.Address;
+                    result.Bio = customer.Bio;
                     result.UpdateAt = DateTime.Now;
+                    result.FavoriteGenres = customer.FavoriteGenres;
+                    await _context.SaveChangesAsync();
+                    return "OK";
+                }
+                else
+                {
+                    return "Customer not found";
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.InnerException!.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> UpdateImage(int id, string url)
+        {
+            try
+            {
+                var result = await _context.Customers.FindAsync(id);
+
+                if (result != null)
+                {
+                    result.Image = url;
                     await _context.SaveChangesAsync();
                     return "OK";
                 }

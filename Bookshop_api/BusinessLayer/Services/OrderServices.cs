@@ -1,5 +1,6 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Data;
+using Bookshop_api.Dto;
 using Bookshop_api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,16 +59,47 @@ namespace Bookshop_api.BusinessLayer.Services
             }
         }
 
-        public async Task<Order> GetOrder(int id)
+        public async Task<List<OrderDto>> GetOrder(int customerId)
         {
             try
             {
-                var result = await _context.Orders.FindAsync(id);
-                return result!;
+                var orders = await _context.Orders
+                    .Where(order => order.CustomerId == customerId)
+                    .Include(order => order.Book)
+                    .ToListAsync();
+
+                if (!orders.Any())
+                {
+                    return new List<OrderDto>();
+                }
+
+                // Map the orders to the desired structure
+                var orderDtos = orders.Select(order => new OrderDto
+                {
+                    Id = $"ORD-{DateTime.Now.Year}-{order.Id:D3}",
+                    Date = order.CreateAt,  
+                    Total = order.TotalPrice,
+                    Status = order.Status,
+                    TrackingNumber = "TRK123456789", 
+                    EstimatedDelivery = order.CreateAt.AddDays(5), 
+                    Items = new List<OrderItemDto>
+            {
+                new OrderItemDto
+                {
+                    Id = order.BookId.ToString(),
+                    Title = order.Book?.Title,
+                    Price = order.Book?.Price ?? 0,
+                    Quantity = order.Quantity,
+                    Image = order.Book?.Image ?? "default_image_url" 
+                }
+            }
+                }).ToList();
+
+                return orderDtos;
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception(ex.InnerException!.Message);
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
             }
             catch (Exception ex)
             {

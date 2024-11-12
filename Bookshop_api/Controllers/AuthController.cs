@@ -1,5 +1,7 @@
 ﻿using Bookshop_api.Data;
 using Bookshop_api.Models;
+using Bookshop_api.Validations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,16 @@ namespace Bookshop_api.Controllers
         [HttpPost("customer-register")]
         public async Task<IActionResult> Register([FromBody] CustomerRegistration model)
         {
+            var validations = new CustomerValidationValidator();
+            var validationResult = validations.Validate(new CustomerValidations(
+                model.Email, model.Password, model.Name, model.MobileNumber, model.Address
+            ));
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             var customer = new IdentityUser { UserName = model.Email };
             var result = await _userManager.CreateAsync(customer, model.Password);
 
@@ -57,7 +69,6 @@ namespace Bookshop_api.Controllers
 
                 return Ok(new { message = "User created successfully", Username = customer.UserName, Role = "User" });
             }
-
             return BadRequest(result.Errors);
         }
 
@@ -82,7 +93,22 @@ namespace Bookshop_api.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        [HttpPost("password-reset")]
+        public async Task<IActionResult> ResetPassword([FromBody] Login model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+                if (result.Succeeded)
+                {
+                    return Ok(new { message = "Password reset successfully" });
+                }
+                return BadRequest(result.Errors);
+            }
+            return BadRequest("User not found");
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
@@ -139,5 +165,7 @@ namespace Bookshop_api.Controllers
             }
             return BadRequest("Role already exists");
         }
+
+
     }
 }

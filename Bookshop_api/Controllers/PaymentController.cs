@@ -37,7 +37,7 @@ namespace Stripe_Web_API.Controllers
                     PaymentMethodTypes = new List<string> { "card" },
                     LineItems = lineItems,
                     Mode = "payment",
-                    SuccessUrl = "http://localhost:5173/#/payment/complete",
+                    SuccessUrl = "http://localhost:5173/#/payment/processing?sessionId={CHECKOUT_SESSION_ID}",
                     CancelUrl = "http://localhost:5173/#/payment/cancelled",
                 };
 
@@ -50,7 +50,6 @@ namespace Stripe_Web_API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
     }
 
     public class CheckoutSessionRequest

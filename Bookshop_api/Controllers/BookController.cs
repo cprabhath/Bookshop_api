@@ -2,6 +2,7 @@
 using Bookshop_api.Models;
 using Bookshop_api.Validations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Bookshop_api.Controllers
 {
@@ -10,9 +11,11 @@ namespace Bookshop_api.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBook _bookServices;
-        public BookController(IBook bookServices)
+        private readonly IDistributedCache _cache;
+        public BookController(IBook bookServices, IDistributedCache cache)
         {
             _bookServices = bookServices;
+            _cache = cache;
         }
 
         // ====================== Get All Books ======================
