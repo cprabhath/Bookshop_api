@@ -80,5 +80,30 @@ namespace Bookshop_api.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, result);
             }
         }
+
+        // ======================= Get Orders Count ========================
+        [HttpGet("count/{id}")]
+        public IActionResult GetOrderCount(int id)
+        {
+            var result = _orderService.GetOrderCountbyCustomerId(id);
+
+            return Ok(result);
+        }
+
+        // =========================== Update Status =====================
+        [HttpPut("status/{id}")]
+        public IActionResult UpdateOrderStatus(int id, [FromBody] string status)
+        {
+            var result = _orderService.UpdateOrderStatus(id, status);
+
+            if (result == "OK")
+            {
+                return StatusCode(StatusCodes.Status200OK, "Order Status Updated Successfully");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, result);
+            }
+        }
     }
 }

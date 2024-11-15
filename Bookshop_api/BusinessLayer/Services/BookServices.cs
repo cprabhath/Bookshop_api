@@ -130,5 +130,33 @@ namespace Bookshop_api.BusinessLayer.Services
                 return ex.Message;
             }
         }
+
+        public async Task<string> UpdateBookQty(int id, int qty)
+        {
+            try
+            {
+                var results = await _context.Books.FindAsync(id);
+                if(results != null)
+                {
+                    results.qty -= qty;
+
+                    await _context.SaveChangesAsync();
+                    return "OK";
+                }
+                else
+                {
+                    return "Book not found";
+                }
+                
+            }
+            catch (DbUpdateException ex)
+            {
+                return ex.InnerException!.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

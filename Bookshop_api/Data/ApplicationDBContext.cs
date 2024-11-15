@@ -15,6 +15,6 @@ namespace Bookshop_api.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
