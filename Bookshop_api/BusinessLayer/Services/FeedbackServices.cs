@@ -98,7 +98,7 @@ namespace Bookshop_api.BusinessLayer.Services
             try
             {
                 var result = _context.Feedbacks.FindAsync(id);
-                if (result != null)
+                if (await result != null)
                 {
                     result.Result!.message = feedback.message;
                     result.Result.name = feedback.name;

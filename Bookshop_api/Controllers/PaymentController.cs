@@ -152,8 +152,8 @@ namespace Stripe_Web_API.Controllers
 
     public class CheckoutSessionRequest
     {
-        public long Amount { get; set; }
-        public string ProductName { get; set; }
+        public long Amount { get; set; } = 0;
+        public string ProductName { get; set; } = string.Empty;
     }
 
 }

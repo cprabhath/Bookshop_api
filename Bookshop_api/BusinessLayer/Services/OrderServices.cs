@@ -86,7 +86,7 @@ namespace Bookshop_api.BusinessLayer.Services
                     Items = order.OrderItems.Select(item => new OrderItemDto
                     {
                         Id = item.BookId.ToString(),
-                        Title = item.Book?.Title,
+                        Title = item.Book!.Title,
                         Price = item.Book?.Price ?? 0,
                         Quantity = item.Quantity,
                         Image = item.Book?.Image ?? "default_image_url"
@@ -171,7 +171,7 @@ namespace Bookshop_api.BusinessLayer.Services
                         if (existingItem != null)
                         {
                             existingItem.Quantity = updatedItem.Quantity;
-                            existingItem.TotalPrice = updatedItem.Quantity * existingItem.Book.Price;
+                            existingItem.TotalPrice = updatedItem.Quantity * existingItem.Book!.Price;
                         }
                         else
                         {
@@ -180,7 +180,7 @@ namespace Bookshop_api.BusinessLayer.Services
                             {
                                 BookId = updatedItem.BookId,
                                 Quantity = updatedItem.Quantity,
-                                TotalPrice = updatedItem.Quantity * updatedItem.Book.Price
+                                TotalPrice = updatedItem.Quantity * updatedItem.Book!.Price
                             });
                         }
                     }
