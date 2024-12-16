@@ -1,7 +1,6 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
-using Bookshop_api.BusinessLayer.Services;
 using Bookshop_api.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -34,6 +33,7 @@ namespace Bookshop_api.Controllers
         // ===========================================================
 
         // =========================== Add Author ======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public IActionResult Post([FromBody] Author author)
         {
@@ -68,6 +68,7 @@ namespace Bookshop_api.Controllers
         // ============================================================
 
         // ======================== Update Author =======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Author author)
         {
@@ -85,6 +86,7 @@ namespace Bookshop_api.Controllers
         // ============================================================
 
         // ======================== Delete Author =======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

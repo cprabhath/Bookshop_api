@@ -1,5 +1,6 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -31,6 +32,7 @@ namespace Bookshop_api.Controllers
         // ===========================================================
 
         // =========================== Add Category ======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public IActionResult Post([FromBody] Category category)
         {
@@ -48,6 +50,7 @@ namespace Bookshop_api.Controllers
         // ============================================================
 
         // =========================== Update Category ======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Category category)
         {
@@ -65,6 +68,7 @@ namespace Bookshop_api.Controllers
         // ============================================================
 
         // =========================== Delete Category ======================
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
