@@ -9,5 +9,6 @@ namespace Bookshop_api.BusinessLayer.Interfaces
         Task<string> UpdateBook(int id, Book book);
         Task<string> DeleteBook(int id);
         Task<Book> GetBookById(int id);
+        Task<string> UpdateBookQty(int id, int qty);
     }
 }

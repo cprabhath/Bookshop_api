@@ -10,5 +10,7 @@ namespace Bookshop_api.BusinessLayer.Interfaces
         String AddOrder(Order order);
         Task<string> UpdateOrder(int id, Order order);
         Task<string> DeleteOrder(int id);
+        String GetOrderCountbyCustomerId(int id);
+        String UpdateOrderStatus(int id, string status);
     }
 }

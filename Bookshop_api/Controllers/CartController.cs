@@ -1,5 +1,6 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshop_api.Controllers
@@ -16,6 +17,7 @@ namespace Bookshop_api.Controllers
         }
 
         // ======================= Add to Cart =======================
+        [Authorize(Policy = "UserPolicy")]
         [HttpPost("add")]
         public async Task<IActionResult> AddToCart(Cart cart)
         {
@@ -32,6 +34,7 @@ namespace Bookshop_api.Controllers
         // ==========================================================
 
         // ======================= Remove from Cart =================
+        [Authorize(Policy = "UserPolicy")]
         [HttpDelete("remove")]
         public async Task<IActionResult> RemoveFromCart(int customerId, int bookId)
         {
@@ -48,6 +51,7 @@ namespace Bookshop_api.Controllers
         // ==========================================================
 
         // ======================= Get Cart by Customer Id ==========
+        [Authorize(Policy = "SuperPolicy")]
         [HttpGet("get")]
         public async Task<IActionResult> GetCartByCustomerId(int customerId)
         {
@@ -64,6 +68,7 @@ namespace Bookshop_api.Controllers
         // ==========================================================
 
         // ======================= Clear Cart =======================
+        [Authorize(Policy = "UserPolicy")]
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearCart(int customerId)
         {

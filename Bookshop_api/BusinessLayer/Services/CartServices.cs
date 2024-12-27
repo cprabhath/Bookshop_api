@@ -23,7 +23,7 @@ namespace Bookshop_api.BusinessLayer.Services
                 if (cartItem != null)
                 {
                     cartItem.Quantity += cart.Quantity;
-                    cartItem.TotalPrice = cartItem.Quantity * cartItem.Book.Price;
+                    cartItem.TotalPrice = cartItem.Quantity * cartItem.Book!.Price;
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace Bookshop_api.BusinessLayer.Services
                 }
                 else
                 {
-                    cartItem.TotalPrice = cartItem.Quantity * cartItem.Book.Price;
+                    cartItem.TotalPrice = cartItem.Quantity * cartItem.Book!.Price;
                 }
 
                 await _context.SaveChangesAsync();

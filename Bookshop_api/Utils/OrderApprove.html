@@ -1,0 +1,141 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007BFF;
+        }
+
+            .header h1 {
+                margin: 0;
+                color: #007BFF;
+                font-size: 28px;
+            }
+
+        .content {
+            padding: 20px;
+        }
+
+        .details {
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+            .details .title {
+                font-weight: bold;
+                color: #333;
+                text-transform: capitalize
+            }
+
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+            .order-table thead {
+                background-color: #007BFF;
+                color: #fff;
+            }
+
+            .order-table th, .order-table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .order-table th {
+                text-transform: uppercase;
+            }
+
+            .order-table tbody tr:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+
+            .order-table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 2px solid #007BFF;
+            border-radius: 0 0 12px 12px;
+        }
+
+            .footer p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .footer a {
+                color: #007BFF;
+                text-decoration: none;
+            }
+
+                .footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                Hey {{CUSTOMER_NAME}}! Your order is on the way!
+            </h1>
+        </div>
+        <div class="content">
+            <p class="details"><span class="title">Order ID:</span> {{ORDER_ID}}</p>
+            <p class="details"><span class="title">Order Date:</span> {{ORDER_DATE}}</p>
+            <p class="details"><span class="title">Customer Name:</span> {{CUSTOMER_NAME}}</p>
+            <p class="details"><span class="title">Order Items:</span></p>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ORDER_ITEMS}}
+                </tbody>
+            </table>
+            <p class="details" style="font-size: 18px; font-weight: bold; color: #007BFF;">
+                <span class="title">Total Price:</span> {{TOTAL_PRICE}}
+            </p>
+        </div>
+        <div class="footer">
+            <p>Your order has been approved. If you have any questions, feel free to <a href="mailto:support@bookverse.com">contact our support team</a>.</p>
+            <p>Thank you for choosing Bookverse!</p>
+        </div>
+    </div>
+</body>
+</html>
