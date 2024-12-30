@@ -90,6 +90,7 @@ builder.Services.AddScoped<ICategory, CategoryServices>();
 builder.Services.AddScoped<ICustomer, CustomerServices>();
 builder.Services.AddScoped<IFeedback, FeedbackServices>();
 builder.Services.AddScoped<IOrder, OrderServices>();
+builder.Services.AddScoped<IReport, ReportServices>();
 
 var app = builder.Build();
 
