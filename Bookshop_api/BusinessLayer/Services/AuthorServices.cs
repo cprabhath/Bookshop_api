@@ -1,10 +1,12 @@
 ﻿using Bookshop_api.BusinessLayer.Interfaces;
 using Bookshop_api.Data;
 using Bookshop_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookshop_api.BusinessLayer.Services
 {
+    [Authorize(Policy = "SuperPolicy")]
     public class AuthorServices : IAuthor
     {
         private readonly ApplicationDBContext _context;

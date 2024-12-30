@@ -9,5 +9,6 @@ namespace Bookshop_api.BusinessLayer.Interfaces
         Task<string> AddFeedback(Feedback feedback);
         Task<string> UpdateFeedback(int id, Feedback feedback);
         Task<string> DeleteFeedback(int id);
+        Task<string> SendMessage(SendMessage sendMessage);
     }
 }

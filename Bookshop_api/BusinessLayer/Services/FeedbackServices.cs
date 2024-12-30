@@ -29,7 +29,6 @@ namespace Bookshop_api.BusinessLayer.Services
                 return ex.Message;
             }
         }
-
         public async Task<string> DeleteFeedback(int id)
         {
             try
@@ -55,7 +54,6 @@ namespace Bookshop_api.BusinessLayer.Services
                 return ex.Message;
             }
         }
-
         public async Task<Feedback> GetFeedback(string email)
         {
             try
@@ -75,7 +73,6 @@ namespace Bookshop_api.BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         public IEnumerable<Feedback> GetFeedbacks()
         {
             try
@@ -92,7 +89,25 @@ namespace Bookshop_api.BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<string> SendMessage(SendMessage sendMessage)
+        {
+            try
+            {
+                if (sendMessage == null) throw new ArgumentNullException(nameof(sendMessage));
+                await _context.Set<SendMessage>().AddAsync(sendMessage);
+                await _context.SaveChangesAsync();
 
+                return "OK";
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception($"Database update error: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
         public async Task<string> UpdateFeedback(int id, Feedback feedback)
         {
             try
